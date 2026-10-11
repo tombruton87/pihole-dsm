@@ -1,0 +1,31 @@
+# Pi-hole, as the Synology package runs it: the compose project in the pihole
+# shared folder. The setup container writes .env beside this. Settings,
+# blocklists and history live in the pihole_etc volume; backups go to the share.
+services:
+  server:
+    image: ${PH_IMAGE:-pihole/pihole:latest}
+    container_name: pihole-server
+    restart: unless-stopped
+    ports:
+      # DNS for your network: devices (or your router) are pointed at this Synology's address.
+      - "${DNS_PORT:-53}:53/tcp"
+      - "${DNS_PORT:-53}:53/udp"
+      # Pi-hole's web page.
+      - "${HTTP_PORT:-8089}:${INNER_PORT:-80}"
+    volumes:
+      - etc:/etc/pihole
+    environment:
+      TZ: ${TZ:-UTC}
+      # Requests arrive through Docker's network, so Pi-hole answers on every interface.
+      FTLCONF_dns_listeningMode: all
+      # DSM's certificate (or a self-signed one), key and certificate in one file, as Pi-hole wants it.
+      FTLCONF_webserver_tls_cert: ${TLS_PEM:-/etc/pihole/tls.pem}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsk https://127.0.0.1:443/api/info/login >/dev/null 2>&1 || curl -fs http://127.0.0.1:80/api/info/login >/dev/null"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  etc:

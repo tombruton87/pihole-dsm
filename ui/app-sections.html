@@ -1,0 +1,40 @@
+    <section data-page="blocking" hidden>
+      <div class="note">What <a class="ph-link" href="#" target="_blank" rel="noopener">Pi-hole</a> blocked today, for every device that uses it for DNS. A site broken? Pause blocking for a few minutes, or always allow it on the Lists tab.</div>
+      <div class="tiles" id="bl-tiles"></div>
+      <div class="card"><div class="in"><p><span id="bl-state"></span></p>
+        <p id="bl-acts" class="row"></p></div></div>
+      <div class="card"><h2>Blocked most today</h2><table><tbody id="bl-top"></tbody></table></div>
+      <div class="card"><h2>Blocked just now</h2><table><thead><tr><th>Site</th><th>Device</th><th>When</th></tr></thead><tbody id="bl-recent"></tbody></table></div>
+    </section>
+
+    <section data-page="lists" hidden>
+      <div class="note">Blocklists say what to block; your own allowed and blocked sites win over them. Lists are fetched again every week, or when you press Update.</div>
+      <div class="card"><h2>Blocklists</h2><table><thead><tr><th>List</th><th>Domains</th><th class="n"></th></tr></thead><tbody id="ls-lists"></tbody></table>
+        <div class="in">
+        <label class="f"><span>Add a blocklist</span><input type="text" id="ls-url" placeholder="https://… — a list in hosts or domains format"></label>
+        <p><button class="btn" id="ls-add" data-app>Add</button> <button class="btn primary" data-act="gravity">Update the lists</button> <span class="muted small" id="ls-when"></span></p></div></div>
+      <div class="card"><h2>Your sites</h2><table><thead><tr><th>Site</th><th></th><th class="n"></th></tr></thead><tbody id="ls-domains"></tbody></table>
+        <div class="in">
+        <label class="f"><span>Site</span><input type="text" id="dm-name" placeholder="example.com — exactly this name"></label>
+        <p><button class="btn" id="dm-allow" data-app>Always allow</button> <button class="btn" id="dm-deny" data-app>Always block</button></p></div></div>
+    </section>
+
+    <section data-page="setup" hidden>
+      <div class="note">Pi-hole only sees the devices that use it for DNS. The easy way is to tell your router — then every device on the network uses it.</div>
+      <div class="card"><h2>Point your network at Pi-hole</h2><div class="in">
+        <p>DNS server: <span class="url" id="su-dns"></span></p>
+        <ol class="steps muted small">
+          <li>In your router's settings, find <b>DHCP</b> or <b>LAN</b> → <b>DNS server</b>, and enter the address above (as the only DNS server — a second one would let ads through).</li>
+          <li>Reconnect a phone or restart a computer, so it picks up the change. Today's numbers on the Blocking tab start to move.</li>
+          <li>Can't change the router? Set the DNS server on each device instead (Wi-Fi settings → DNS → manual).</li>
+        </ol>
+        <p class="muted small" id="su-port"></p></div></div>
+      <div class="card"><h2>Where Pi-hole asks</h2><div class="in">
+        <p class="muted small">For everything it doesn't block, Pi-hole asks an upstream DNS service.</p>
+        <label class="f"><span>Upstream</span><select id="su-up"><option value="cloudflare">Cloudflare (1.1.1.1) — fast, private</option><option value="quad9">Quad9 (9.9.9.9) — also blocks known malware</option><option value="google">Google (8.8.8.8)</option><option value="custom">Others…</option></select></label>
+        <label class="f" id="su-custom-row"><span>DNS servers</span><input type="text" id="su-custom" placeholder="e.g. 192.168.1.1 — up to two, separated by a space"></label>
+        <button class="btn" id="su-save" data-app>Save</button> <span class="muted small" id="su-now"></span></div></div>
+      <div class="card"><h2>Pi-hole's password</h2><div class="in">
+        <p class="muted small">For Pi-hole's own web page. Lost it? Make a new one — shown once.</p>
+        <button class="btn" data-act="newpw" data-confirm="Make a new Pi-hole password? The old one stops working.">New password</button></div></div>
+    </section>
